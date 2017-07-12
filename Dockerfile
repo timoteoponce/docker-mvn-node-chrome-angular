@@ -48,4 +48,5 @@ RUN curl -kSLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux
   && npm install -g @angular/cli \
   && npm cache clean
 
+CMD ["/bin/bash"]
 
