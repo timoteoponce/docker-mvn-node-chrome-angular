@@ -15,11 +15,10 @@ RUN apt-get update && apt-get install -y curl git xvfb firefox apt-transport-htt
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN  curl \
-  --silent \
-  --location \
+  --location -b "oraclelicense=a" \
   --retry 3 \
   --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
-  "http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.tar.gz" \
+  "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz" \
     | gunzip \
     | tar x -C /usr/ \
     && ln -s $JAVA_HOME /usr/java \
@@ -29,7 +28,7 @@ ENV MAVEN_VERSION 3.3.9
 ENV MAVEN_HOME /usr/lib/mvn
 ENV PATH $MAVEN_HOME/bin:$PATH
 
-RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+RUN curl -O --retry 3 http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
   tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
   rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
   mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
