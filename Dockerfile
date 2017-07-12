@@ -3,7 +3,7 @@ MAINTAINER Timoteo Ponce <timo.slack@gmail.com>
 
 ##########################
 # INSTALL JAVAs
-ENV JAVA_HOME /usr/jdk1.8.0_66
+ENV JAVA_HOME /usr/jdk1.8.0_131
 ENV PATH ${PATH}:${JAVA_HOME}/bin
 ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 7.2.0
