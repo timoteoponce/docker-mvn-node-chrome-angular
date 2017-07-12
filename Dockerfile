@@ -2,12 +2,9 @@ FROM ubuntu:zesty
 MAINTAINER Timoteo Ponce <timo.slack@gmail.com>
 
 ##########################
-# INSTALL JAVA, SBT and other deps
-ENV SBT_VERSION 0.13.11
-ENV SBT_HOME /usr/local/sbt
+# INSTALL JAVAs
 ENV JAVA_HOME /usr/jdk1.8.0_66
 ENV PATH ${PATH}:${JAVA_HOME}/bin
-ENV PATH ${PATH}:${SBT_HOME}/bin
 ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 7.2.0
 
@@ -17,7 +14,6 @@ RUN apt-get update && apt-get install -y curl git xvfb firefox apt-transport-htt
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -sL "http://dl.bintray.com/sbt/native-packages/sbt/$SBT_VERSION/sbt-$SBT_VERSION.tgz" | gunzip | tar -x -C /usr/local
 RUN  curl \
   --silent \
   --location \
@@ -28,6 +24,16 @@ RUN  curl \
     | tar x -C /usr/ \
     && ln -s $JAVA_HOME /usr/java \
     && rm -rf $JAVA_HOME/src.zip $JAVA_HOME/javafx-src.zip $JAVA_HOME/man
+
+ENV MAVEN_VERSION 3.3.9
+ENV MAVEN_HOME /usr/lib/mvn
+ENV PATH $MAVEN_HOME/bin:$PATH
+
+RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
+
 
 RUN curl -sL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
@@ -40,7 +46,7 @@ RUN curl -kSLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux
   && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.xz" \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
-  && npm install -g bower gulp web-component-tester \
+  && npm install -g @angular/cli \
   && npm cache clean
 
 
